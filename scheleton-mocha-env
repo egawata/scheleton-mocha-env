@@ -1,0 +1,27 @@
+#!/bin/bash
+
+BASEDIR=$1
+if [ -z $BASEDIR ]; then
+    BASEDIR=.
+fi
+
+TOOL_BASE=$SCHELETON_MOCHA_ENV_BASE
+if [ -z $TOOL_BASE ]; then
+    TOOL_BASE=~/.scheleton-mocha-env
+fi
+
+cd $BASEDIR
+
+npm init -y
+cat package.json | $TOOL_BASE/change_script_test_mocha.pl > /tmp/package.json
+mv /tmp/package.json package.json
+
+npm install mocha chai --save-dev
+
+if [ ! -d test ]; then
+    mkdir test
+fi
+
+cp -n $TOOL_BASE/files/testrunner.html test/
+cp -n $TOOL_BASE/files/test.js test/
+
